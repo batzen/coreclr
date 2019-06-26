@@ -1509,7 +1509,7 @@ CHECK PEDecoder::CheckILOnlyImportDlls() const
     }
     CONTRACT_CHECK_END;
 
-    // The only allowed DLL Imports are MscorEE.dll:_CorExeMain,_CorDllMain
+    // The only allowed DLL Imports are MscorEE.dll:_CorExeMain,_CorDllMain or ijwhost:_CorExeMain,_CorDllMain
 
 #ifdef _WIN64
     // On win64, when the image is LoadLibrary'd, we whack the import and IAT directories. We have to relax
@@ -1550,10 +1550,10 @@ CHECK PEDecoder::CheckILOnlyImportDlls() const
 
     // Ensure the RVA of the name plus its length is valid for this image
     UINT nameRVA = VAL32(pID[0].Name);
-    CHECK(CheckRva(nameRVA, (COUNT_T) sizeof("mscoree.dll")));
+    CHECK(CheckRva(nameRVA, (COUNT_T) sizeof("mscoree.dll")) || CheckRva(nameRVA, (COUNT_T) sizeof("ijwhost.dll")));
 
     // Make sure the name is equal to mscoree
-    CHECK(SString::_stricmp( (char *)GetRvaData(nameRVA), "mscoree.dll") == 0);
+    CHECK(SString::_stricmp( (char *)GetRvaData(nameRVA), "mscoree.dll") == 0 || SString::_stricmp( (char *)GetRvaData(nameRVA), "ijwhost.dll") == 0);
 
     // Check the Hint/Name table.
     CHECK(CheckILOnlyImportByNameTable(VAL32(IMAGE_IMPORT_DESC_FIELD(pID[0], OriginalFirstThunk))));

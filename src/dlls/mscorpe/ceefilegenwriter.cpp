@@ -637,7 +637,7 @@ HRESULT CeeFileGenWriter::allocateIAT()
         return E_OUTOFMEMORY;
     }
     memset(m_iDataDlls, '\0', m_dllCount * sizeof(IDataDllInfo));
-    m_iDataDlls[0].m_name = "mscoree.dll";
+    m_iDataDlls[0].m_name = "ijwhost.dll";
     m_iDataDlls[0].m_numMethods = 1;
     m_iDataDlls[0].m_methodName = new (nothrow) const char*[m_iDataDlls[0].m_numMethods];
     if (! m_iDataDlls[0].m_methodName) {
